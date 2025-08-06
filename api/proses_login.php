@@ -38,7 +38,7 @@ if ($result->num_rows === 1) {
 }
 
 // Jika login gagal
-echo "Email atau password salah. <a href='../login.html'>Coba lagi</a>.";
+echo "Email atau password salah. <a href='../login.php'>Coba lagi</a>.";
 
 $stmt->close();
 $conn->close();

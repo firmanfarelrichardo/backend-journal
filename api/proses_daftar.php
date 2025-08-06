@@ -22,7 +22,7 @@ if (empty($name) || empty($email) || empty($password) || empty($nip)) { // <-- T
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
 // Ubah query INSERT untuk menyertakan kolom dan nilai NIP
-$stmt = $conn->prepare("INSERT INTO users (nama, email, password, nip, role) VALUES (?, ?, ?, ?, 'admin')");
+$stmt = $conn->prepare("INSERT INTO users (nama, email, password, nip, role) VALUES (?, ?, ?, ?, 'user')");
 $stmt->bind_param("ssss", $name, $email, $hashed_password, $nip); // <-- Update bind_param (4 string -> "ssss")
 
 if ($stmt->execute()) {

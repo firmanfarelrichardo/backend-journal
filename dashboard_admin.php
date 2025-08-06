@@ -30,7 +30,7 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
 
         <h2>Jalankan Harvester Manual</h2>
         <p>Klik tombol di bawah untuk memulai proses harvesting dari semua jurnal terdaftar.</p>
-        <button onclick="window.open('harvester_interaktif_final.php', '_blank');">Mulai Proses Panen</button>
+        <button onclick="window.open('../oai_test.php', '_blank');">Mulai Proses Panen</button>
     </main>
 </body>
 </html>
