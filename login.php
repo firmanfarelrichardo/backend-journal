@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Selamat Datang - Portal Agregator</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
     <div class="form-container">
@@ -30,7 +30,7 @@
             <form action="api/proses_daftar.php" method="POST">
                 <h2>Daftar Akun Baru</h2>
                 <div class="input-grup">
-                    <input type="text" name="name" placeholder="Nama Lengkap" required>
+                    <input type="text" name="nama" placeholder="Nama Lengkap" required>
                 </div>
                  <div class="input-grup">
                     <input type="text" name="nip" placeholder="NIP (Wajib diisi)" required>
