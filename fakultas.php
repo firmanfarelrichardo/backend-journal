@@ -18,7 +18,7 @@
 
             foreach ($fakultas_list as $fakultas) {
                 // Buat link ke halaman detail jurnal dengan parameter fakultas
-                echo '<a href="jurnal_fakultas.php?fakultas=' . urlencode($fakultas) . '" class="fakultas-card">';
+                echo '<a href="jurnal_fak.php?fakultas=' . urlencode($fakultas) . '" class="fakultas-card">';
                 echo '<h3>' . htmlspecialchars($fakultas) . '</h3>';
                 // Anda bisa menambahkan query untuk menghitung jumlah jurnal per fakultas di sini
                 echo '<p>Lihat Jurnal</p>';

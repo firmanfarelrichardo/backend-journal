@@ -31,14 +31,14 @@ if ($result->num_rows === 1) {
             header("Location: ../dashboard_admin.php");
         } else {
             // Arahkan ke halaman utama jika user biasa
-            header("Location: ../index.html");
+            header("Location: ../index.php");
         }
         exit();
     }
 }
 
 // Jika login gagal
-echo "Email atau password salah. <a href='../login.php'>Coba lagi</a>.";
+echo "Email atau password salah. <a href='../login.html'>Coba lagi</a>.";
 
 $stmt->close();
 $conn->close();

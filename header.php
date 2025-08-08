@@ -22,10 +22,10 @@ if (session_status() === PHP_SESSION_NONE) {
             </nav>
             <div class="user-actions">
                 <?php if (isset($_SESSION['user_id'])): ?>
-                    <a href="admin_dashboard.php" class="btn-login">Dashboard</a>
+                    <a href="dashboard_admin.php" class="btn-login">Dashboard</a>
                     <a href="api/logout.php" class="btn-logout">Logout</a>
                 <?php else: ?>
-                    <a href="login.php" class="btn-login">Login</a>
+                    <a href="login.html" class="btn-login">Login</a>
                 <?php endif; ?>
             </div>
         </div>
