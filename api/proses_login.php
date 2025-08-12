@@ -1,17 +1,20 @@
 <?php
-session_start(); // Wajib ada di awal untuk memulai session
+// Wajib ada di awal untuk memulai atau melanjutkan session
+session_start();
 
 // Pengaturan Database
 $host = "localhost"; $user = "root"; $pass = ""; $db = "oai";
 $conn = new mysqli($host, $user, $pass, $db);
 
-if ($conn->connect_error) { die("Koneksi gagal: " . $conn->connect_error); }
+if ($conn->connect_error) { 
+    die("Koneksi gagal: " . $conn->connect_error); 
+}
 
 $email = $_POST['email'];
 $password = $_POST['password'];
 
 // Ambil data user dari DB
-$stmt = $conn->prepare("SELECT NIP, nama, password, role FROM users WHERE email = ?");
+$stmt = $conn->prepare("SELECT nip, nama, password, role FROM users WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
 $result = $stmt->get_result();
@@ -22,7 +25,7 @@ if ($result->num_rows === 1) {
     // Verifikasi password yang di-hash
     if (password_verify($password, $user_data['password'])) {
         // Password cocok, simpan data ke session
-        $_SESSION['user_id'] = $user_data['NIP'];
+        $_SESSION['user_id'] = $user_data['nip'];
         $_SESSION['user_name'] = $user_data['nama'];
         $_SESSION['user_role'] = $user_data['role'];
 
@@ -33,12 +36,14 @@ if ($result->num_rows === 1) {
             // Arahkan ke halaman utama jika user biasa
             header("Location: ../index.php");
         }
-        exit();
+        exit(); // Hentikan eksekusi skrip setelah redirect
     }
 }
 
-// Jika login gagal
-echo "Email atau password salah. <a href='../login.html'>Coba lagi</a>.";
+// Jika login gagal (email tidak ditemukan atau password salah)
+echo "<h1>Login Gagal</h1>";
+echo "<p>Email atau password yang Anda masukkan salah.</p>";
+echo "<a href='../login.html'>Coba Lagi</a>";
 
 $stmt->close();
 $conn->close();

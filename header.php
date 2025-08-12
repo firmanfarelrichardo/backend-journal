@@ -13,7 +13,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <body>
     <header class="main-header">
         <div class="container">
-            <a href="index.php" class="logo">PORTAL JURNAL</a>
+            <a href="index.php" class="logo">Unila E-Journal System</a>
             <nav class="main-nav">
                 <ul>
                     <li><a href="index.php">Home</a></li>
