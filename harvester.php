@@ -1,22 +1,7 @@
 <?php
-
-/**
- * File: harvester_interaktif_final.php
- * Deskripsi: Menggabungkan menu interaktif dengan logika resumption token
- * untuk proses panen yang lengkap dan user-friendly.
- */
-
-// --- DAFTAR JURNAL YANG TERSEDIA (HANYA BASE URL) ---
-// Kita hapus parameter '?verb=...' agar bisa ditambahkan secara dinamis oleh skrip.
-$jurnal_list = [
-    "Jurnal Teknologi dan Inovasi Industri (JTII)" => "https://jtii.eng.unila.ac.id/index.php/ojs/oai",
-    "Jurnal Teknik Sipil (JESR)" => "http://jesr.eng.unila.ac.id/index.php/ojs/oai",
-    "Jurnal Penelitian Informatika (JPI)" => "https://jpi.eng.unila.ac.id/index.php/ojs/oai", // Server masih suspend
-    "Jurnal Geosains dan Remote Sensing (JGRS)" => "https://jgrs.eng.unila.ac.id/index.php/geo/oai",
-    "Jurnal Geofisika Eksplorasi (JGE)" => "https://jge.eng.unila.ac.id/index.php/geoph/oai",
-    "Jurnal Informatika dan Teknik Elektro Terapan (JITET)" => "https://journal.eng.unila.ac.id/index.php/jitet/oai",
-    "Jurnal Rekayasa dan Teknologi Elektro" => "https://electrician.unila.ac.id/index.php/ojs/oai",   
-];
+echo "<!DOCTYPE html><html><head><title>Proses Panen Otomatis</title></head><body style='font-family: sans-serif; line-height: 1.6;'>";
+echo "<h1>Memulai Proses Panen Menyeluruh</h1>";
+echo "<a href='dashboard_admin.php'>&laquo; Kembali ke Dashboard</a><hr>";
 
 // --- PENGATURAN DATABASE ---
 $host = "localhost";
@@ -24,29 +9,38 @@ $user = "root";
 $pass = "";
 $db = "oai";
 
-// ===================================================================
-// === LOGIKA UTAMA: Cek apakah pengguna sudah memilih jurnal? ===
-// ===================================================================
+// Tingkatkan batas waktu eksekusi
+set_time_limit(0); 
 
-if (isset($_GET['url_target']) && !empty($_GET['url_target'])) {
+// 1. KONEKSI KE DATABASE UNTUK MENGAMBIL DAFTAR JURNAL
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    die("KONEKSI GAGAL: " . $conn->connect_error);
+}
+echo "Koneksi database berhasil.<br>";
+
+$jurnal_list_from_db = [];
+$sql = "SELECT journal_title, oai_url FROM jurnal_sumber WHERE oai_url IS NOT NULL AND oai_url != ''";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $jurnal_list_from_db[$row['journal_title']] = $row['oai_url'];
+    }
+} else {
+    echo "Tidak ada jurnal dengan URL OAI yang valid di database untuk dipanen.";
+    exit;
+}
+
+echo "Ditemukan " . count($jurnal_list_from_db) . " jurnal untuk dipanen.<hr>";
+
+// 2. LAKUKAN PROSES PANEN UNTUK SETIAP JURNAL DARI DATABASE
+foreach ($jurnal_list_from_db as $nama_jurnal => $base_oai_url) {
     
-    // --- KONDISI 2: JURNAL SUDAH DIPILIH, MULAI PROSES PANEN LENGKAP ---
-    
-    $base_oai_url = $_GET['url_target'];
-    
-    // Tampilkan header dan tombol kembali
-    echo "<!DOCTYPE html><html><head><title>Proses Panen</title></head><body style='font-family: sans-serif; line-height: 1.6;'>";
-    echo "<h2>Memulai Proses Panen Menyeluruh</h2>";
-    echo "<p><strong>Target:</strong> " . htmlspecialchars($base_oai_url) . "</p>";
-    echo "<a href='" . basename(__FILE__) . "'>&laquo; Kembali ke Daftar Jurnal</a><hr>";
+    echo "<h2>Memproses Jurnal: " . htmlspecialchars($nama_jurnal) . "</h2>";
+    echo "<p><strong>Target OAI URL:</strong> " . htmlspecialchars($base_oai_url) . "</p>";
 
-    set_time_limit(0); 
-
-    $conn = new mysqli($host, $user, $pass, $db);
-    if ($conn->connect_error) die("KONEKSI GAGAL: " . $conn->connect_error);
-    echo "Koneksi database berhasil.<br>";
-
-    // --- LOGIKA RESUMPTION TOKEN DIMULAI DI SINI ---
+    // --- LOGIKA RESUMPTION TOKEN DIMULAI DI SINI (SAMA SEPERTI SEBELUMNYA) ---
     $resumptionToken = null;
     $isFirstRequest = true;
     $total_new_articles = 0;
@@ -55,9 +49,9 @@ if (isset($_GET['url_target']) && !empty($_GET['url_target'])) {
     $page = 1;
 
     do {
-        echo "<hr><strong>Memproses Halaman: " . $page . "</strong><br>";
+        echo "<hr><strong>Halaman: " . $page . "</strong><br>";
 
-        // 1. Bangun URL secara dinamis
+        // Bangun URL secara dinamis
         if ($isFirstRequest) {
             $oai_url = $base_oai_url . "?verb=ListRecords&metadataPrefix=oai_dc";
             $isFirstRequest = false;
@@ -69,19 +63,26 @@ if (isset($_GET['url_target']) && !empty($_GET['url_target'])) {
 
         // Ambil dan proses XML
         $xmlContent = @file_get_contents($oai_url);
-        if (!$xmlContent) { echo "GAGAL mengambil data XML. Proses dihentikan.<br>"; break; }
+        if (!$xmlContent) { echo "GAGAL mengambil data XML. Lanjut ke jurnal berikutnya.<br>"; break; }
+        
+        // Menggunakan error handling untuk SimpleXML
+        libxml_use_internal_errors(true);
         $xml = simplexml_load_string($xmlContent);
-        if (!$xml) { echo "GAGAL parsing XML. Proses dihentikan.<br>"; break; }
+        if ($xml === false) { 
+            echo "GAGAL parsing XML. Lanjut ke jurnal berikutnya.<br>";
+            libxml_clear_errors();
+            break; 
+        }
 
         $xml->registerXPathNamespace('oai', 'http://www.openarchives.org/OAI/2.0/');
         $xml->registerXPathNamespace('dc', 'http://purl.org/dc/elements/1.1/');
 
         $records = $xml->xpath('//oai:record');
-        if (!$records) { echo "Tidak ada record ditemukan di halaman ini.<br>"; break; }
+        if (empty($records)) { echo "Tidak ada record ditemukan di halaman ini.<br>"; break; }
 
-        // 2. Proses semua record di halaman ini
+        // Proses semua record di halaman ini (TIDAK ADA PERUBAHAN DI SINI)
         foreach ($records as $record) {
-            if (!isset($record->metadata)) { $total_deleted_records++; continue; }
+             if (!isset($record->metadata)) { $total_deleted_records++; continue; }
             $dc = $record->metadata->children('http://www.openarchives.org/OAI/2.0/oai_dc/')->dc->children('http://purl.org/dc/elements/1.1/');
             $unique_identifier = isset($dc->identifier[0]) ? (string)$dc->identifier[0] : null;
             if (!$unique_identifier) continue;
@@ -170,30 +171,19 @@ if (isset($_GET['url_target']) && !empty($_GET['url_target'])) {
         sleep(1); // Beri jeda 1 detik
         $page++;
 
-    } while (!empty($resumptionToken)); // 4. Ulangi selama token tidak kosong
+    } while (!empty($resumptionToken));
 
-    echo "<hr><strong>PROSES KESELURUHAN SELESAI.</strong><br>";
+    echo "<hr><strong>PROSES PANEN UNTUK JURNAL INI SELESAI.</strong><br>";
     echo "Total artikel baru ditambahkan: " . $total_new_articles . "<br>";
     echo "Total artikel sudah ada (dilewati): " . $total_skipped_articles . "<br>";
-    echo "Total record kosong/dihapus (dilewati): " . $total_deleted_records . "<br>";
-    echo "</body></html>";
+    echo "Total record kosong/dihapus (dilewati): " . $total_deleted_records . "<br><hr style='border: 2px solid red;'>";
 
-    $conn->close();
+} // Akhir dari loop foreach jurnal
 
-} else {
+echo "<h2>SEMUA PROSES PANEN TELAH SELESAI.</h2>";
+echo "</body></html>";
 
-    // --- KONDISI 1: TIDAK ADA JURNAL YANG DIPILIH, TAMPILKAN MENU ---
-    echo "<!DOCTYPE html><html><head><title>Pilih Jurnal</title></head><body style='font-family: sans-serif;'>";
-    echo "<h1>Pilih Jurnal yang Akan Dipanen</h1>";
-    echo "<p>Silakan klik salah satu link di bawah ini untuk memulai proses harvesting.</p>";
-    echo "<ul>";
-    
-    foreach ($jurnal_list as $nama => $url) {
-        echo "<li><a href='?url_target=" . urlencode($url) . "'>" . htmlspecialchars($nama) . "</a></li>";
-    }
-    
-    echo "</ul>";
-    echo "</body></html>";
-}
-
+$conn->close();
 ?>
+
+

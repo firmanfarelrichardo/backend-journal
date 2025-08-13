@@ -315,7 +315,7 @@ main {
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-.admin-form .form-group {
+ .admin-form .form-group {
     margin-bottom: 20px;
 }
 
@@ -328,18 +328,14 @@ main {
 
 .admin-form input[type="text"],
 .admin-form input[type="url"],
+.admin-form input[type="email"],
+.admin-form input[type="number"],
 .admin-form select {
-    width: 100%;
+    width: 95%;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
-}
-
-.admin-form .submit-btn {
-    display: inline-block;
-    width: auto;
-    padding: 12px 30px;
 }
 
 .admin-action-container button{
@@ -348,6 +344,35 @@ main {
     padding: 12px 30px;
     border-radius: 5px;
     background-color:rgb(100, 214, 100)
+}
+
+.admin-form .submit-btn {
+    display: inline-block;
+    width: auto;
+    padding: 12px 30px;
+}
+
+.admin-form fieldset {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+.admin-form legend {
+    font-size: 1.1em;
+    font-weight: 600;
+    padding: 0 10px;
+    color: #c0392b;
+}
+
+.admin-form textarea {
+    width: 95%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    font-family: inherit;
 }
 
 /* --- Halaman Hasil Pencarian --- */
