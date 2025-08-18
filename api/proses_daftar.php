@@ -8,7 +8,7 @@ if ($conn->connect_error) {
 }
 
 // Ambil data dari form
-$name = $_POST['name'];
+$name = $_POST['nama'];
 $nip = $_POST['nip'];
 $email = $_POST['email'];
 $password = $_POST['password'];
@@ -21,8 +21,8 @@ if (empty($name) || empty($nip) || empty($email) || empty($password)) {
 // Hash password untuk keamanan
 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-// Masukkan ke database dengan role default 'user'
-$stmt = $conn->prepare("INSERT INTO users (name, nip, email, password, role) VALUES (?, ?, ?, ?, 'user')");
+// Masukkan ke database dengan role default 'admin'
+$stmt = $conn->prepare("INSERT INTO users (nama, nip, email, password, role) VALUES (?, ?, ?, ?, 'admin')");
 $stmt->bind_param("ssss", $name, $nip, $email, $hashed_password);
 
 if ($stmt->execute()) {
