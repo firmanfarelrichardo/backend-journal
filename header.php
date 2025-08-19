@@ -13,13 +13,16 @@ if (session_status() === PHP_SESSION_NONE) {
 <body>
     <header class="main-header">
         <div class="container">
-            <a href="index.php" class="logo">Unila E-Journal System</a>
+            <a href="index.php" class="logo">
+            </a>
             <nav class="main-nav">
                 <ul>
                     <li><a href="index.php">Home</a></li>
                     <li><a href="fakultas.php">Fakultas</a></li>
+                    <li><a href="#">Tentang Kami</a></li>
                     </ul>
             </nav>
+
             <div class="user-actions">
                 <?php if (isset($_SESSION['user_id'])): ?>
                     <a href="dashboard_admin.php" class="btn-login">Dashboard</a>
