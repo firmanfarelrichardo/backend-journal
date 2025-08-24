@@ -228,6 +228,68 @@ h1, h2, h3, h4, h5, h6 {
 
 
 /* ==========================================================================
+   3.1. SUBJECT SELECTION (DI BAWAH SEARCH) - UPDATED FOR TAG CLOUD
+   ========================================================================== */
+.subject-selection {
+    margin-top: 35px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.subject-selection p {
+    color: var(--white);
+    opacity: 0.8;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+
+.subjects-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px; /* Sedikit lebih besar untuk tag cloud */
+    align-items: center; /* Agar tag dengan tinggi berbeda terlihat rapi */
+}
+
+.subjects-list a {
+    /* Gaya Dasar untuk semua tag */
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--white);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    line-height: 1; /* Menjaga konsistensi vertikal */
+}
+
+.subjects-list a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    color: var(--white);
+}
+
+/* Kelas untuk Ukuran Berbeda */
+.subjects-list a.tag-small {
+    font-size: 0.8rem;
+    padding: 7px 14px;
+    font-weight: 400;
+}
+
+.subjects-list a.tag-medium {
+    font-size: 1rem;
+    padding: 9px 18px;
+    font-weight: 500;
+}
+
+.subjects-list a.tag-large {
+    font-size: 1.25rem;
+    padding: 11px 22px;
+    font-weight: 600; /* Lebih tebal untuk tag besar */
+}
+
+
+/* ==========================================================================
    4. CONTENT SHOWCASE (KOTAK DI TENGAH)
    ========================================================================== */
 .content-showcase {

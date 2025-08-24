@@ -26,11 +26,35 @@
                 </form>
             </div>
 
-            <div class="hero-actions">
-                <a href="fakultas.php" class="action-button">
-                    <i class="fas fa-book"></i> Telusuri berdasarkan subjek
-                </a>
+            <div class="subject-selection">
+                <p>Telusuri berdasarkan kata kunci populer:</p>
+                <div class="subjects-list">
+                    <?php
+                    // Daftar kata kunci utama yang sudah dipilih (bisa Anda ubah sesuai kebutuhan)
+                    $keywords = [
+                        'Pendidikan', 'Ilmu Sosial', 'Teknik', 'Manajemen',
+                        'Ekonomi', 'Hukum', 'Kesehatan', 'Agrikultur',
+                        'Sains', 'Komputer', 'Lingkungan', 'Bahasa',
+                        'Biologi', 'Komunikasi', 'Seni & Desain', 'Keuangan'
+                    ];
+
+                    // Daftar kelas CSS untuk ukuran yang berbeda
+                    $size_classes = ['tag-medium', 'tag-large', 'tag-small', 'tag-medium'];
+
+                    // Acak urutan kata kunci agar tampilan selalu bervariasi
+                    shuffle($keywords);
+
+                    foreach ($keywords as $keyword) {
+                        // Pilih kelas ukuran secara acak dari daftar
+                        $random_class = $size_classes[array_rand($size_classes)];
+                        
+                        // Buat link yang mengarah ke pencarian
+                        echo '<a href="search.php?keyword=' . urlencode($keyword) . '" class="' . $random_class . '">' . htmlspecialchars($keyword) . '</a>';
+                    }
+                    ?>
+                </div>
             </div>
+
         </div>
     </section>
 </main>
