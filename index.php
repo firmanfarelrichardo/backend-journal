@@ -9,8 +9,6 @@
 </head>
 <body>
 
-    <div id="light-rays-background"></div>
-
 <main>
     <section class="hero-banner">
         <div class="hero-content">
@@ -34,14 +32,6 @@
                 </a>
             </div>
         </div>
-    </section>
-
-    <section class="content-showcase">
-        <div class="container">
-            <div class="section-header">
-                <h2>Jelajahi Dunia Akademik</h2>
-                <p>Akses koleksi jurnal yang dikelompokkan berdasarkan bidang keilmuan di setiap fakultas.</p>
-            </div>
     </section>
 </main>
 
