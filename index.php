@@ -9,39 +9,42 @@
 </head>
 <body>
 
-    <header>
-        <h1>Unila E-Journal System</h1>
-        <p>Temukan artikel dari berbagai Fakultas di Universitas Lampung.</p>
-    </header>
+    <div id="light-rays-background"></div>
 
-    <main>
-        <form id="form-pencarian-hero" action="search.php" method="GET">
-             <input type="search" name="keyword" placeholder="Cari artikel, judul, penulis..." required>
-            <button type="submit">Cari</button>
-        </form>
+<main>
+    <section class="hero-banner">
+        <div class="hero-content">
+            <h1>Unila E-Journal System</h1>
+            <p class="hero-subtitle">Temukan artikel dari berbagai Fakultas di Universitas Lampung.</p>
+            
+            <div class="hero-search-container">
+                <form action="search.php" method="GET" class="hero-search-form">
+                    <div class="search-input-wrapper">
+                        <input type="search" name="keyword" placeholder="Cari artikel, judul, penulis..." required>
+                    </div>
+                    <button type="submit" aria-label="Cari">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
 
-        <div id="loading" style="display:none;">
-            <p>Mencari...</p>
+            <div class="hero-actions">
+                <a href="fakultas.php" class="action-button">
+                    <i class="fas fa-book"></i> Telusuri berdasarkan subjek
+                </a>
+            </div>
         </div>
+    </section>
 
-        <section id="hasil-pencarian">
-            </section>
-        
-
-    <section class="stats-section">
+    <section class="content-showcase">
         <div class="container">
-            <div class="stat-item">
-                <h2>-</h2>
-                <p>Jurnal Terindeks</p>
+            <div class="section-header">
+                <h2>Jelajahi Dunia Akademik</h2>
+                <p>Akses koleksi jurnal yang dikelompokkan berdasarkan bidang keilmuan di setiap fakultas.</p>
             </div>
-            <div class="stat-item">
-                <h2>-</h2>
-                <p>Artikel Ditemukan</p>
-            </div>
-            <div class="stat-item">
-                <h2>8</h2>
-                <p>Fakultas</p>
-            </div>
-        </div>
-    </section>    
-    </main>
+    </section>
+</main>
+
+<?php include 'footer.php'; ?>
+</body>
+</html>
