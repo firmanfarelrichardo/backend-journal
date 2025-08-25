@@ -26,16 +26,84 @@
                 </form>
             </div>
 
+            <?php
+            // Koneksi ke database untuk mengambil data statistik
+            $host = "localhost"; $user = "root"; $pass = ""; $db = "oai";
+            $conn_stats = new mysqli($host, $user, $pass, $db);
+
+            $total_articles = 0;
+            $total_journals = 0;
+            $total_publishers = 0;
+            $total_subjects = 0;
+
+            if (!$conn_stats->connect_error) {
+                // 1. Hitung total artikel
+                $result = $conn_stats->query("SELECT COUNT(*) as total FROM artikel_oai");
+                $total_articles = $result->fetch_assoc()['total'];
+
+                // 2. Hitung total jurnal
+                $result = $conn_stats->query("SELECT COUNT(*) as total FROM jurnal_sumber");
+                $total_journals = $result->fetch_assoc()['total'];
+
+                // 3. Hitung total penerbit unik
+                $result = $conn_stats->query("SELECT COUNT(DISTINCT publisher) as total FROM artikel_oai WHERE publisher IS NOT NULL AND publisher != ''");
+                $total_publishers = $result->fetch_assoc()['total'];
+
+                // 4. Hitung total subjek unik
+                $sql_subjects = "SELECT COUNT(DISTINCT subject) as total FROM (
+                                    SELECT subject1 AS subject FROM artikel_oai WHERE subject1 IS NOT NULL AND subject1 != '' UNION
+                                    SELECT subject2 AS subject FROM artikel_oai WHERE subject2 IS NOT NULL AND subject2 != '' UNION
+                                    SELECT subject3 AS subject FROM artikel_oai WHERE subject3 IS NOT NULL AND subject3 != ''
+                                 ) as all_subjects";
+                $result = $conn_stats->query($sql_subjects);
+                $total_subjects = $result->fetch_assoc()['total'];
+
+                $conn_stats->close();
+            }
+            ?>
+
+            <div class="stats-bar">
+                <div class="stats-item">
+                    <i class="fas fa-file-alt"></i>
+                    <div class="stats-info">
+                        <span class="number"><?php echo number_format($total_articles); ?></span>
+                        <span class="label">Artikel</span>
+                    </div>
+                </div>
+                <div class="stats-item">
+                    <i class="fas fa-users"></i>
+                    <div class="stats-info">
+                        <span class="number"><?php echo number_format($total_publishers); ?></span>
+                        <span class="label">Penerbit</span>
+                    </div>
+                </div>
+                <div class="stats-item">
+                    <i class="fas fa-book-open"></i>
+                    <div class="stats-info">
+                        <span class="number"><?php echo number_format($total_journals); ?></span>
+                        <span class="label">Jurnal</span>
+                    </div>
+                </div>
+                <div class="stats-item">
+                    <i class="fas fa-tag"></i>
+                    <div class="stats-info">
+                        <span class="number"><?php echo number_format($total_subjects); ?></span>
+                        <span class="label">Subjek</span>
+                    </div>
+                </div>
+            </div>
+
+
             <div class="subject-selection">
                 <p>Telusuri berdasarkan kata kunci populer:</p>
                 <div class="subjects-list">
                     <?php
                     // Daftar kata kunci utama yang sudah dipilih (bisa Anda ubah sesuai kebutuhan)
                     $keywords = [
-                        'Pendidikan', 'Ilmu Sosial', 'Teknik', 'Manajemen',
-                        'Ekonomi', 'Hukum', 'Kesehatan', 'Agrikultur',
-                        'Sains', 'Komputer', 'Lingkungan', 'Bahasa',
-                        'Biologi', 'Komunikasi', 'Seni & Desain', 'Keuangan'
+                        'Pendidikan', 'Sosial', 'Teknik', 'Manajemen',
+                        'Ekonomi', 'Hukum', 'Kesehatan', 'Matematika',
+                        'Pertanian', 'Komputer', 'Lingkungan', 'Bahasa',
+                        'Biologi', 'Komunikasi', 'Seni', 'Keuangan'
                     ];
 
                     // Daftar kelas CSS untuk ukuran yang berbeda
