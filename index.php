@@ -46,7 +46,7 @@
                 $total_journals = $result->fetch_assoc()['total'];
 
                 // 3. Hitung total penerbit unik
-                $result = $conn_stats->query("SELECT COUNT(DISTINCT publisher_name) as total FROM jurnal_sumber WHERE publisher_name IS NOT NULL AND publisher_name != ''");
+                $result = $conn_stats->query("SELECT COUNT(DISTINCT publisher) as total FROM artikel_oai WHERE publisher IS NOT NULL AND publisher != ''");
                 $total_publishers = $result->fetch_assoc()['total'];
 
                 // 4. Hitung total subjek unik
@@ -100,10 +100,10 @@
                     <?php
                     // Daftar kata kunci utama yang sudah dipilih (bisa Anda ubah sesuai kebutuhan)
                     $keywords = [
-                        'Pendidikan', 'Ilmu Sosial', 'Teknik', 'Manajemen',
-                        'Ekonomi', 'Hukum', 'Kesehatan', 'Agrikultur',
-                        'Sains', 'Komputer', 'Lingkungan', 'Bahasa',
-                        'Biologi', 'Komunikasi', 'Seni & Desain', 'Keuangan'
+                        'Pendidikan', 'Sosial', 'Teknik', 'Manajemen',
+                        'Ekonomi', 'Hukum', 'Kesehatan', 'Matematika',
+                        'Pertanian', 'Komputer', 'Lingkungan', 'Bahasa',
+                        'Biologi', 'Komunikasi', 'Seni', 'Keuangan'
                     ];
 
                     // Daftar kelas CSS untuk ukuran yang berbeda
