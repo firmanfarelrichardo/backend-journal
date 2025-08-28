@@ -1,123 +1,113 @@
-<?php
+<?php 
 include 'header.php';
 
-// --- PENGATURAN & PENGAMBILAN PARAMETER ---
-$results_per_page = 10; // Jumlah jurnal per halaman
-
-// Ambil parameter dari URL
-$nama_fakultas = isset($_GET['fakultas']) ? urldecode($_GET['fakultas']) : '';
+// --- BAGIAN PHP UNTUK MENGAMBIL DATA (TIDAK ADA PERUBAHAN) ---
+$results_per_page = 10;
+$fakultas = isset($_GET['fakultas']) ? trim($_GET['fakultas']) : '';
 $search_query = isset($_GET['q']) ? trim($_GET['q']) : '';
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $results_per_page;
 
-// Jika tidak ada nama fakultas, hentikan eksekusi
-if (empty($nama_fakultas)) {
-    echo "<main class='page-container'><div class='container'><h1>Fakultas tidak ditemukan.</h1></div></main></body></html>";
+if (empty($fakultas)) {
+    echo "<main><div class='container my-5'><h1>Fakultas tidak valid.</h1></div></main>";
+    include 'footer.php';
     exit();
 }
 
-// --- LOGIKA DATABASE & QUERY DINAMIS ---
 $host = "localhost"; $user = "root"; $pass = ""; $db = "oai";
 $conn = new mysqli($host, $user, $pass, $db);
 if ($conn->connect_error) { die("Koneksi gagal: " . $conn->connect_error); }
 
-// Siapkan query dinamis berdasarkan ada tidaknya pencarian
-$sql_where_clauses = ["fakultas = ?"];
-$sql_params_types = "s";
-$sql_params_values = [$nama_fakultas];
+$base_sql = "FROM jurnal_sumber";
+$where_clauses = ["fakultas = ?"];
+$param_types = "s";
+$param_values = [$fakultas];
 
 if (!empty($search_query)) {
-    $sql_where_clauses[] = "(journal_title LIKE ? OR issn LIKE ? OR eissn LIKE ?)";
-    $sql_params_types .= "sss";
+    $where_clauses[] = "(journal_title LIKE ? OR issn LIKE ? OR eissn LIKE ?)";
+    $param_types .= "sss";
     $search_term = "%" . $search_query . "%";
-    $sql_params_values[] = $search_term;
-    $sql_params_values[] = $search_term;
-    $sql_params_values[] = $search_term;
+    array_push($param_values, $search_term, $search_term, $search_term);
 }
-$where_sql = " WHERE " . implode(" AND ", $sql_where_clauses);
+$where_sql = " WHERE " . implode(" AND ", $where_clauses);
 
-// Query untuk menghitung total hasil (untuk pagination)
-$count_sql = "SELECT COUNT(*) FROM jurnal_sumber" . $where_sql;
+$count_sql = "SELECT COUNT(*) " . $base_sql . $where_sql;
 $count_stmt = $conn->prepare($count_sql);
-$count_stmt->bind_param($sql_params_types, ...$sql_params_values);
+$count_stmt->bind_param($param_types, ...$param_values);
 $count_stmt->execute();
 $total_results = $count_stmt->get_result()->fetch_row()[0];
 $total_pages = ceil($total_results / $results_per_page);
 $count_stmt->close();
 
-// Query utama untuk mengambil data jurnal
-$data_sql = "SELECT journal_title, publisher_name, issn, eissn, cover_url FROM jurnal_sumber" . $where_sql . " LIMIT ? OFFSET ?";
-$sql_params_types .= "ii";
-$sql_params_values[] = $results_per_page;
-$sql_params_values[] = $offset;
+$data_sql = "SELECT id, journal_title, publisher_name, issn, eissn, cover_url " . $base_sql . $where_sql . " ORDER BY journal_title ASC LIMIT ? OFFSET ?";
+$param_types .= "ii";
+array_push($param_values, $results_per_page, $offset);
 
 $data_stmt = $conn->prepare($data_sql);
-$data_stmt->bind_param($sql_params_types, ...$sql_params_values);
+$data_stmt->bind_param($param_types, ...$param_values);
 $data_stmt->execute();
 $result = $data_stmt->get_result();
 ?>
 
-<title>Jurnal Fakultas <?php echo htmlspecialchars($nama_fakultas); ?></title>
+<main class="flex-shrink-0">
+    <div class="container py-4">
 
-<main class="page-container">
-    <div class="container">
-        <div class="page-header publisher-header">
-            <img src="https://via.placeholder.com/100x100.png?text=<?php echo substr($nama_fakultas, 0, 1); ?>" alt="Logo Fakultas" class="publisher-logo">
-            <div>
-                <h2>Fakultas <?php echo htmlspecialchars($nama_fakultas); ?></h2>
-                <p>Universitas Lampung</p>
-                <span><?php echo $total_results; ?> Jurnal Ditemukan</span>
-            </div>
+        <div class="page-sub-header mb-4">
+            <h1 class="h2 mb-0">Fakultas <?php echo htmlspecialchars($fakultas); ?></h1>
+            <p class="text-muted mb-0">Universitas Lampung</p>
+            <span class="fw-bold"><?php echo $total_results; ?> Jurnal Ditemukan</span>
         </div>
 
-        <div class="filter-bar">
-            <div class="mini-search-bar">
-                <form action="jurnal_fak.php" method="GET">
-                    <input type="hidden" name="fakultas" value="<?php echo htmlspecialchars($nama_fakultas); ?>">
-                    <input type="search" name="q" placeholder="Cari Jurnal di fakultas ini..." value="<?php echo htmlspecialchars($search_query); ?>">
-                    <button type="submit">Cari</button>
-                </form>
-            </div>
-            <nav class="pagination">
-                <ul>
-                    <?php
-                    if ($total_pages > 1) {
-                        for ($i = 1; $i <= $total_pages; $i++) {
-                            $active_class = ($i == $page) ? 'active' : '';
-                            $query_string = http_build_query(['fakultas' => $nama_fakultas, 'q' => $search_query, 'page' => $i]);
-                            echo '<li><a href="jurnal_fakultas.php?' . $query_string . '" class="' . $active_class . '">' . $i . '</a></li>';
-                        }
-                    }
-                    ?>
+        <div class="filter-bar-container mb-4">
+            <form action="jurnal_fak.php" method="GET" class="mini-search-form">
+                <input type="hidden" name="fakultas" value="<?php echo htmlspecialchars($fakultas); ?>">
+                <div class="input-group">
+                    <input type="search" name="q" class="form-control" placeholder="Cari Jurnal, ISSN, EISSN..." value="<?php echo htmlspecialchars($search_query); ?>">
+                    <button class="btn btn-danger" type="submit"><i class="fas fa-search"></i></button>
+                </div>
+            </form>
+            <nav>
+                <ul class="pagination mb-0">
+                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                        <li class="page-item <?php if ($i == $page) echo 'active'; ?>">
+                            <a class="page-link" href="?fakultas=<?php echo urlencode($fakultas); ?>&q=<?php echo urlencode($search_query); ?>&page=<?php echo $i; ?>">
+                                <?php echo $i; ?>
+                            </a>
+                        </li>
+                    <?php endfor; ?>
                 </ul>
             </nav>
         </div>
 
-        <div class="journal-list">
-            <?php
-            if ($result->num_rows > 0) {
-                while ($row = $result->fetch_assoc()) {
-                    $cover = !empty($row['cover_url']) ? $row['cover_url'] : 'https://via.placeholder.com/100x140.png?text=No+Cover';
-                    echo '<div class="journal-item">';
-                    echo '<img src="' . htmlspecialchars($cover) . '" alt="Cover Jurnal" class="journal-cover">';
-                    echo '<div class="journal-info">';
-                    echo '<h4><a href="#">' . htmlspecialchars($row['journal_title']) . '</a></h4>'; // Link ke detail jurnal nanti
-                    echo '<p class="journal-publisher">' . htmlspecialchars($row['publisher_name'] ?? 'Universitas Lampung') . '</p>';
-                    echo '<span class="journal-issn">ISSN: ' . htmlspecialchars($row['issn'] ?? '-') . '</span>';
-                    echo '<span class="journal-issn">EISSN: ' . htmlspecialchars($row['eissn'] ?? '-') . '</span>';
-                    echo '<div class="journal-tags"><span class="tag">' . htmlspecialchars($nama_fakultas) . '</span></div>';
-                    echo '</div>';
-                    echo '</div>';
-                }
-            } else {
-                echo '<p>Tidak ada jurnal yang ditemukan dengan kriteria Anda.</p>';
-            }
-            $data_stmt->close();
-            $conn->close();
-            ?>
+        <div class="journal-list-container">
+            <?php if ($result->num_rows > 0): ?>
+                <?php while ($row = $result->fetch_assoc()): ?>
+                <div class="journal-list-item">
+                    <div class="journal-item-content">
+                        <a href="detail_jurnal.php?id=<?php echo $row['id']; ?>" class="journal-title-link">
+                           <?php echo htmlspecialchars($row['journal_title']); ?>
+                        </a>
+                        <div class="journal-meta">
+                            <span>Universitas Lampung</span>
+                            <span>JOURNAL</span>
+                            <span>ISSN : <?php echo htmlspecialchars($row['issn'] ?? '-'); ?></span>
+                            <span>EISSN : <?php echo htmlspecialchars($row['eissn'] ?? '-'); ?></span>
+                        </div>
+                        <div class="journal-tags">
+                            <span class="tag"><?php echo htmlspecialchars($fakultas); ?></span>
+                        </div>
+                    </div>
+                </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <div class="alert alert-warning">Tidak ada jurnal yang ditemukan dengan kriteria Anda.</div>
+            <?php endif; ?>
         </div>
     </div>
 </main>
 
-</body>
-</html>
+<?php 
+$data_stmt->close();
+$conn->close();
+include 'footer.php'; 
+?>

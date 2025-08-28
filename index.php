@@ -1,13 +1,4 @@
-<?php include 'header.php';?>
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal Agregator Jurnal</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+<?php include 'header.php'; ?>
 
 <main>
     <section class="hero-banner">
@@ -31,37 +22,22 @@
             $host = "localhost"; $user = "root"; $pass = ""; $db = "oai";
             $conn_stats = new mysqli($host, $user, $pass, $db);
 
-            $total_articles = 0;
-            $total_journals = 0;
-            $total_publishers = 0;
-            $total_subjects = 0;
+            $total_articles = 0; $total_journals = 0; $total_publishers = 0; $total_subjects = 0;
 
             if (!$conn_stats->connect_error) {
-                // 1. Hitung total artikel
                 $result = $conn_stats->query("SELECT COUNT(*) as total FROM artikel_oai");
                 $total_articles = $result->fetch_assoc()['total'];
-
-                // 2. Hitung total jurnal
                 $result = $conn_stats->query("SELECT COUNT(*) as total FROM jurnal_sumber");
                 $total_journals = $result->fetch_assoc()['total'];
-
-                // 3. Hitung total penerbit unik
                 $result = $conn_stats->query("SELECT COUNT(DISTINCT publisher) as total FROM artikel_oai WHERE publisher IS NOT NULL AND publisher != ''");
                 $total_publishers = $result->fetch_assoc()['total'];
-
-                // 4. Hitung total subjek unik
-                $sql_subjects = "SELECT COUNT(DISTINCT subject) as total FROM (
-                                    SELECT subject1 AS subject FROM artikel_oai WHERE subject1 IS NOT NULL AND subject1 != '' UNION
-                                    SELECT subject2 AS subject FROM artikel_oai WHERE subject2 IS NOT NULL AND subject2 != '' UNION
-                                    SELECT subject3 AS subject FROM artikel_oai WHERE subject3 IS NOT NULL AND subject3 != ''
-                                 ) as all_subjects";
+                $sql_subjects = "SELECT COUNT(DISTINCT subject) as total FROM ( SELECT subject1 AS subject FROM artikel_oai WHERE subject1 IS NOT NULL AND subject1 != '' UNION SELECT subject2 AS subject FROM artikel_oai WHERE subject2 IS NOT NULL AND subject2 != '' UNION SELECT subject3 AS subject FROM artikel_oai WHERE subject3 IS NOT NULL AND subject3 != '' ) as all_subjects";
                 $result = $conn_stats->query($sql_subjects);
                 $total_subjects = $result->fetch_assoc()['total'];
-
                 $conn_stats->close();
             }
-            ?>
-
+            ?> 
+            
             <div class="stats-bar">
                 <div class="stats-item">
                     <i class="fas fa-file-alt"></i>
@@ -92,7 +68,6 @@
                     </div>
                 </div>
             </div>
-
 
             <div class="subject-selection">
                 <p>Telusuri berdasarkan kata kunci populer:</p>

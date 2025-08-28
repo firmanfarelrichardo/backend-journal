@@ -20,12 +20,12 @@ if ($conn->connect_error) {
 echo "Koneksi database berhasil.<br>";
 
 $jurnal_list_from_db = [];
-$sql = "SELECT journal_title, oai_url FROM jurnal_sumber WHERE oai_url IS NOT NULL AND oai_url != ''";
+$sql = "SELECT id, journal_title, oai_url FROM jurnal_sumber WHERE oai_url IS NOT NULL AND oai_url != ''";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
-        $jurnal_list_from_db[$row['journal_title']] = $row['oai_url'];
+    $jurnal_list_from_db[] = $row;
     }
 } else {
     echo "Tidak ada jurnal dengan URL OAI yang valid di database untuk dipanen.";
@@ -35,7 +35,10 @@ if ($result->num_rows > 0) {
 echo "Ditemukan " . count($jurnal_list_from_db) . " jurnal untuk dipanen.<hr>";
 
 // 2. LAKUKAN PROSES PANEN UNTUK SETIAP JURNAL DARI DATABASE
-foreach ($jurnal_list_from_db as $nama_jurnal => $base_oai_url) {
+foreach ($jurnal_list_from_db as $jurnal) {
+    $jurnal_id = $jurnal['id'];
+    $nama_jurnal = $jurnal['journal_title'];
+    $base_oai_url = $jurnal['oai_url'];
     
     echo "<h2>Memproses Jurnal: " . htmlspecialchars($nama_jurnal) . "</h2>";
     echo "<p><strong>Target OAI URL:</strong> " . htmlspecialchars($base_oai_url) . "</p>";
@@ -132,7 +135,7 @@ foreach ($jurnal_list_from_db as $nama_jurnal => $base_oai_url) {
                 // --- KODE LENGKAP UNTUK INSERT KE DATABASE ---
                 $insertStmt = $conn->prepare(
                     "INSERT INTO artikel_oai (
-                        unique_identifier, title, description, publisher, date, language, coverage, rights,
+                        journal_source_id, journal_title_clean, unique_identifier, title, description, publisher, date, language, coverage, rights,
                         creator1, creator2, creator3,
                         subject1, subject2, subject3,
                         contributor1, contributor2,
@@ -141,10 +144,10 @@ foreach ($jurnal_list_from_db as $nama_jurnal => $base_oai_url) {
                         identifier1, identifier2, identifier3,
                         source1, source2,
                         relation1, relation2
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                 );
-                $insertStmt->bind_param("sssssssssssssssssssssssssss", 
-                    $unique_identifier, $title, $description, $publisher, $date, $language, $coverage, $rights,
+                $insertStmt->bind_param("issssssssssssssssssssssssssss", 
+                    $jurnal_id, $nama_jurnal, $unique_identifier, $title, $description, $publisher, $date, $language, $coverage, $rights,
                     $creator1, $creator2, $creator3,
                     $subject1, $subject2, $subject3,
                     $contributor1, $contributor2,

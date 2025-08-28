@@ -146,7 +146,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .hero-content h1 {
     font-size: 3.5rem;
-    font-weight: 700;
+    font-weight: 550;
     margin-bottom: 10px;
     color: var(--white);
     text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
@@ -603,4 +603,6 @@ main {
 .admin-form input, .admin-form select, .admin-form textarea { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px; }
 .admin-form fieldset { border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 25px; }
 .admin-form .submit-btn, .action-btn, .action-btn-secondary { width: 100%; padding: 12px; border: none; border-radius: 5px; font-size: 1em; font-weight: 600; cursor: pointer; transition: background-color 0.2s ease; }
-.action-btn { background-color: #27ae60; color: white; }
+.submit-btn2 { background-color: #27ae60; color: white; width: 100%; padding: 12px; border: none; border-radius: 5px; font-size: 1em; font-weight: 600; cursor: pointer; transition: background-color 0.2s ease;}
+
+

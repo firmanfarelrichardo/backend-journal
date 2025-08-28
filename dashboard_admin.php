@@ -141,7 +141,7 @@ include 'header.php';
             <div class="admin-action-container">
                 <h3>Jalankan Proses Panen (Harvesting)</h3>
                 <p>Klik tombol di bawah untuk memulai proses pengambilan metadata...</p>
-                <button onclick="window.open('harvester.php', '_blank');" class="submit-btn" style="background-image: none; background-color: #27ae60;">
+                <button onclick="window.open('harvester.php', '_blank');" class="submit-btn2">
                     Mulai Proses Panen Semua Jurnal
                 </button>
             </div>

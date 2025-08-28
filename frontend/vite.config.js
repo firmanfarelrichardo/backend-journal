@@ -1,7 +1,19 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+// vite.config.js
+import { resolve } from 'path';
+import { defineConfig } from 'vite';
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-})
+  build: {
+    // Folder output hasil build
+    outDir: 'dist',
+    // Hasilkan manifest.json untuk integrasi lebih lanjut (opsional)
+    manifest: true,
+    rollupOptions: {
+      // Tentukan file input Anda di sini
+      input: {
+        main: resolve(__dirname, 'src/main.js'),
+        styles: resolve(__dirname, 'src/main.scss'),
+      },
+    },
+  },
+});

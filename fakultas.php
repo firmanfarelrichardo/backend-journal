@@ -1,33 +1,39 @@
 <?php include 'header.php'; ?>
-<title>Daftar Fakultas - Portal Jurnal</title>
 
-<main class="page-container">
-    <div class="container">
-        <div class="page-header">
-            <h1>FAKULTAS</h1>
-            <p>Telusuri jurnal berdasarkan fakultas.</p>
+<main>
+    <div class="page-title-container">
+        <div class="container">
+            <h1>Telusuri Berdasarkan Fakultas</h1>
+            <p>Pilih fakultas untuk melihat semua artikel yang berafiliasi.</p>
         </div>
+    </div>
 
+    <div class="container page-content"><br>
         <div class="fakultas-grid">
             <?php
             $fakultas_list = [
-                'Teknik', 'Pertanian', 'Kedokteran', 'Hukum', 
-                'Ilmu Sosial dan Politik', 'MIPA', 
-                'Keguruan dan Ilmu Pendidikan', 'Ekonomi dan Bisnis'
+                'Teknik' => 'fas fa-cogs',
+                'Pertanian' => 'fas fa-seedling',
+                'Kedokteran' => 'fas fa-stethoscope',
+                'Hukum' => 'fas fa-gavel',
+                'Ilmu Sosial dan Politik' => 'fas fa-users',
+                'MIPA' => 'fas fa-flask',
+                'Keguruan dan Ilmu Pendidikan' => 'fas fa-chalkboard-teacher',
+                'Ekonomi dan Bisnis' => 'fas fa-chart-line'
             ];
 
-            foreach ($fakultas_list as $fakultas) {
-                // Buat link ke halaman detail jurnal dengan parameter fakultas
-                echo '<a href="jurnal_fak.php?fakultas=' . urlencode($fakultas) . '" class="fakultas-card">';
-                echo '<h3>' . htmlspecialchars($fakultas) . '</h3>';
-                // Anda bisa menambahkan query untuk menghitung jumlah jurnal per fakultas di sini
-                echo '<p>Lihat Jurnal</p>';
+            foreach ($fakultas_list as $nama => $icon) {
+                echo '<a href="jurnal_fak.php?fakultas=' . urlencode($nama) . '" class="fakultas-card">';
+                echo '<div class="fakultas-icon"><i class="' . $icon . '"></i></div>';
+                echo '<h3>' . htmlspecialchars($nama) . '</h3>';
+                // Anda bisa menambahkan query untuk menghitung jumlah artikel/jurnal per fakultas di sini jika perlu
+                echo '<span class="fakultas-link">Lihat Artikel <i class="fas fa-arrow-right"></i></span>';
                 echo '</a>';
             }
             ?>
         </div>
+        <br>
     </div>
 </main>
 
-</body>
-</html>
+<?php include 'footer.php'; ?>

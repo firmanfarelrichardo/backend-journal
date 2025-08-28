@@ -51,3 +51,7 @@
         </div>
     </div>
 </footer>
+
+<script type="module" src="/Journal-OAI/frontend/dist/main.js"></script>
+</body>
+</html>
