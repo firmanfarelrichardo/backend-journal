@@ -11,7 +11,7 @@ if ($conn->connect_error) {
 // Mendapatkan huruf yang dipilih dari URL, defaultnya 'A'
 $selected_char = isset($_GET['char']) ? strtoupper(substr($_GET['char'], 0, 1)) : 'A';
 if (!ctype_alpha($selected_char)) {
-    $selected_char = 'A'; // Keamanan, pastikan hanya huruf
+    $selected_char = 'A';
 }
 
 // --- PENGATURAN PAGINASI ---
@@ -70,16 +70,12 @@ $count_stmt->close();
                 while ($row = $result->fetch_assoc()) {
                     echo '<div class="article-item">';
                     echo '  <h4><a href="' . htmlspecialchars($row['identifier1']) . '" target="_blank">' . htmlspecialchars($row['title']) . '</a></h4>';
-                    
                     $creators = array_filter([$row['creator1'], $row['creator2'], $row['creator3']]);
                     if (!empty($creators)) {
                         echo '  <p class="article-creator">Oleh: ' . htmlspecialchars(implode(', ', $creators)) . '</p>';
                     }
-                    
-                    // PERBAIKAN 1: Menambahkan '?? ""' untuk menangani deskripsi yang kosong (NULL)
                     $description_snippet = substr(strip_tags($row['description'] ?? ''), 0, 300);
                     echo '  <p class="article-description">' . htmlspecialchars($description_snippet) . '...</p>';
-
                     echo '  <p class="article-source">Penerbit: ' . htmlspecialchars($row['publisher']) . '</p>';
                     echo '</div>';
                 }
@@ -90,20 +86,35 @@ $count_stmt->close();
             ?>
         </div>
 
-        <nav class="pagination">
+        <nav class="pagination modern">
             <ul>
                 <?php
                 if ($total_pages > 1) {
+                    // Tombol "Previous"
+                    if ($page > 1) {
+                        echo '<li><a href="subjek.php?char=' . $selected_char . '&page=' . ($page - 1) . '">&laquo; Previous</a></li>';
+                    }
+
+                    // Logika untuk menampilkan nomor halaman (misal: 1 ... 4 5 6 ... 10)
+                    $window = 2; // Jumlah nomor di sekitar halaman aktif
                     for ($i = 1; $i <= $total_pages; $i++) {
-                        $active_class = ($i == $page) ? 'active' : '';
-                        // PERBAIKAN 2: Mengubah konstanta 'i' menjadi variabel '$i'
-                        echo '<li><a href="subjek.php?char=' . $selected_char . '&page=' . $i . '" class="' . $active_class . '">' . $i . '</a></li>';
+                        if ($i == 1 || $i == $total_pages || ($i >= $page - $window && $i <= $page + $window)) {
+                            $active_class = ($i == $page) ? 'active' : '';
+                            echo '<li><a href="subjek.php?char=' . $selected_char . '&page=' . $i . '" class="' . $active_class . '">' . $i . '</a></li>';
+                        } elseif ($i == $page - $window - 1 || $i == $page + $window + 1) {
+                            echo '<li><span class="ellipsis">...</span></li>';
+                        }
+                    }
+
+                    // Tombol "Next"
+                    if ($page < $total_pages) {
+                        echo '<li><a href="subjek.php?char=' . $selected_char . '&page=' . ($page + 1) . '">Next &raquo;</a></li>';
                     }
                 }
                 ?>
             </ul>
         </nav>
-    </div>
+        </div>
 </main>
 
 <?php

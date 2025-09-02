@@ -745,8 +745,10 @@ main {
 }
 
 /* ==========================================================================
-   6.2. ALPHABET NAVIGATION
+   6.2. PAGE NAVIGATION STYLES (Alphabet & Modern Pagination)
    ========================================================================== */
+
+/* Gaya untuk Navigasi Abjad A-Z (Versi Lama) */
 .alphabet-nav {
     background-color: var(--light-gray);
     padding: 15px;
@@ -766,7 +768,7 @@ main {
 .alphabet-nav ul li a {
     display: block;
     padding: 5px 10px;
-    min-width: 35px;
+    min-width: 35px; /* Mengembalikan lebar minimal */
     text-align: center;
     font-weight: 600;
     color: var(--primary-color);
@@ -787,6 +789,47 @@ main {
     color: var(--white);
     border-color: var(--primary-color);
     cursor: default;
+}
+
+
+/* Gaya untuk Paginasi Modern (Previous/Next) */
+.pagination.modern {
+    margin: 40px 0 20px 0;
+    text-align: center;
+}
+.pagination.modern ul {
+    list-style: none;
+    padding: 0;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+}
+.pagination.modern ul li a,
+.pagination.modern ul li .ellipsis {
+    display: block;
+    padding: 10px 15px;
+    color: var(--primary-color);
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+.pagination.modern ul li a:hover {
+    background-color: var(--light-gray);
+    border-color: var(--primary-color);
+}
+.pagination.modern ul li a.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    font-weight: 600;
+    cursor: default;
+}
+.pagination.modern ul li .ellipsis {
+    border: none;
+    background: none;
+    padding: 10px 5px;
 }
 
 /* ==========================================================================
