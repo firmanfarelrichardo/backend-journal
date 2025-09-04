@@ -1,1 +1,1 @@
-# backend from Journal-OAI
+# Journal-OAI
