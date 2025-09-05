@@ -3,7 +3,10 @@
 session_start();
 
 // Pengaturan Database
-$host = "localhost"; $user = "root"; $pass = ""; $db = "oai";
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db = "oai";
 $conn = new mysqli($host, $user, $pass, $db);
 
 if ($conn->connect_error) { 
@@ -29,11 +32,15 @@ if ($result->num_rows === 1) {
         $_SESSION['user_name'] = $user_data['nama'];
         $_SESSION['user_role'] = $user_data['role'];
 
-        // Arahkan ke dashboard admin jika role-nya admin
-        if ($user_data['role'] === 'admin') {
+        // Arahkan ke dashboard sesuai role
+        if ($user_data['role'] === 'superadmin') {
+            header("Location: ../dashboard_superadmin.php");
+        } else if ($user_data['role'] === 'admin') {
             header("Location: ../dashboard_admin.php");
+        } else if ($user_data['role'] === 'pengelola') {
+            header("Location: ../dashboard_pengelola.php");
         } else {
-            // Arahkan ke halaman utama jika user biasa
+            // Arahkan ke halaman utama jika role tidak terdefinisi
             header("Location: ../index.php");
         }
         exit(); // Hentikan eksekusi skrip setelah redirect
