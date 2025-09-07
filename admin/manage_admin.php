@@ -72,16 +72,22 @@ if ($result) {
         .action-buttons form {
             display: inline-block;
         }
-        .action-buttons button {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
+       .action-buttons button {
+        background-color: #e74c3c;
+        display: inline-block;
+        padding: 8px 12px;
+        border-radius: 4px;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.3s ease;
         }
         .action-buttons button:hover {
             background-color: #c0392b;
+            transform: translateY(-2px); /* efek naik */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* shadow elegan */
         }
         .add-btn {
             background-color: #2ecc71;
@@ -99,6 +105,29 @@ if ($result) {
             justify-content: space-between;
             align-items: center;
         }
+
+        .edit-btn {
+        display: inline-block;
+        padding: 8px 16px;
+        background-color: #4CAF50; /* hijau elegan */
+        color: #fff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        }
+
+        .edit-btn:hover {
+        background-color: #45a049; /* warna lebih gelap saat hover */
+        transform: translateY(-2px); /* efek naik */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* shadow elegan */
+        }
+
+        .edit-btn:active {
+        transform: translateY(0); /* kembali normal saat ditekan */
+        box-shadow: none;
+        }
     </style>
 </head>
 <body>
@@ -112,7 +141,7 @@ if ($result) {
                 <li><a href="dashboard_superadmin.php"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
                 <li><a href="manage_admin.php" class="active"><i class="fas fa-user-shield"></i> <span>Kelola Admin</span></a></li>
                 <li><a href="manage_pengelola.php"><i class="fas fa-user-cog"></i> <span>Kelola Pengelola</span></a></li>
-                <li><a href="manage_jurnal.php"><i class="fas fa-book"></i> <span>Kelola Jurnal</span></a></li>
+                <li><a href="manage_journal.php"><i class="fas fa-book"></i> <span>Kelola Jurnal</span></a></li>
                 <li><a href="change_password.php"><i class="fas fa-key"></i> <span>Ganti Password</span></a></li>
                 <li><a href="../api/logout.php"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
             </ul>
@@ -157,6 +186,7 @@ if ($result) {
                                     <td><?php echo htmlspecialchars($admin['nama']); ?></td>
                                     <td><?php echo htmlspecialchars($admin['email']); ?></td>
                                     <td class="action-buttons">
+                                         <a href="edit_admin.php?id=<?php echo htmlspecialchars($admin['id']); ?>" class="edit-btn">Edit</a>
                                         <form method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus admin ini?');">
                                             <input type="hidden" name="id" value="<?php echo htmlspecialchars($admin['id']); ?>">
                                             <button type="submit" name="delete_admin">Hapus</button>
