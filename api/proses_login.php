@@ -34,11 +34,11 @@ if ($result->num_rows === 1) {
 
         // Arahkan ke dashboard sesuai role
         if ($user_data['role'] === 'superadmin') {
-            header("Location: ../dashboard_superadmin.php");
+            header("Location: ../admin/dashboard_superadmin.php");
         } else if ($user_data['role'] === 'admin') {
-            header("Location: ../dashboard_admin.php");
+            header("Location: ../admin/dashboard_admin.php");
         } else if ($user_data['role'] === 'pengelola') {
-            header("Location: ../dashboard_pengelola.php");
+            header("Location: ../admin/dashboard_pengelola.php");
         } else {
             // Arahkan ke halaman utama jika role tidak terdefinisi
             header("Location: ../index.php");
