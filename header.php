@@ -46,15 +46,6 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </ul>
                 </nav>
             </div>
-            <div class="header-right">
-                <div class="user-actions">
-                    <?php if (isset($_SESSION['user_id'])): ?>
-                        <a href="dashboard_superadmin.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
-                        <a href="api/logout.php" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                    <?php else: ?>
-                        <a href="login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
-                    <?php endif; ?>
-                </div>
-            </div>
+            
         </div>
     </header>
