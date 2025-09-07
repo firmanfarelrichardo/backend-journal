@@ -20,6 +20,7 @@ body {
     box-shadow: 2px 0 5px rgba(0,0,0,0.1);
     transition: width 0.3s ease, padding 0.3s ease;
     overflow: hidden;
+    position: relative; /* Menambahkan ini untuk posisi tombol toggle */
 }
 
 .sidebar.collapsed {
@@ -96,15 +97,15 @@ body {
     padding: 10px 15px;
     border-radius: 5px;
     cursor: pointer;
-    position: fixed;
-    left: 260px;
+    position: absolute;
+    right: 10px;
     top: 20px;
-    transition: left 0.3s ease;
-    z-index: 100;
+    transition: right 0.3s ease;
+    z-index: 200;
 }
 
-.sidebar.collapsed + .main-content .sidebar-toggle-btn {
-    left: 90px;
+.sidebar.collapsed .sidebar-toggle-btn {
+    right: -25px; /* Menggeser tombol toggle saat sidebar diciutkan */
 }
 
 /* Main Content Styling */
