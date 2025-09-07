@@ -48,13 +48,90 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_pengelola'])) {
     <link rel="stylesheet" href="admin_style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        .form-container {
-            max-width: 600px;
-            margin: 20px auto;
-        }
-        .form-tambah input, .form-tambah button {
-            margin-top: 10px;
-        }
+       /* ===== Reset dasar ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===== Area utama ===== */
+.content-area {
+display: flex;
+  justify-content: center;   /* bikin ke tengah horizontal */
+  align-items: flex-start; 
+  background: #f7fafd; /* biar lembut dan konsisten */
+}
+
+/* ===== Card form ===== */
+.form-container.card {
+  background: #fff;
+  padding: 30px 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Animasi masuk */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Label ===== */
+.form-container label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+/* ===== Input ===== */
+.form-container input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.form-container input:focus {
+  border-color: #4facfe;
+  box-shadow: 0 0 6px rgba(79, 172, 254, 0.5);
+}
+
+/* ===== Tombol ===== */
+.form-container button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #4facfe, #00f2fe);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-container button:hover {
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
     </style>
 </head>
 <body>
@@ -68,7 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_pengelola'])) {
                 <li><a href="dashboard_superadmin.php"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
                 <li><a href="manage_admin.php"><i class="fas fa-user-shield"></i> <span>Kelola Admin</span></a></li>
                 <li><a href="manage_pengelola.php" class="active"><i class="fas fa-user-cog"></i> <span>Kelola Pengelola</span></a></li>
-                <li><a href="manage_jurnal.php"><i class="fas fa-book"></i> <span>Kelola Jurnal</span></a></li>
+                <li><a href="manage_journal.php"><i class="fas fa-book"></i> <span>Kelola Jurnal</span></a></li>
                 <li><a href="change_password.php"><i class="fas fa-key"></i> <span>Ganti Password</span></a></li>
                 <li><a href="../api/logout.php"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
             </ul>
