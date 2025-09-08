@@ -9,9 +9,183 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'pengelola') {
     header("Location: login.html");
     exit();
 }
-include 'header.php';
+
+// Konfigurasi database MySQL
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db = "oai";
+$conn = new mysqli($host, $user, $pass, $db);
+
+// Periksa koneksi
+if ($conn->connect_error) {
+    die("Koneksi gagal: " . $conn->connect_error);
+}
+
 ?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Formulir Pendaftaran Jurnal</title>
+<link rel="stylesheet" href="admin_style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+
+<style>
+/* ===== PAGE STYLE ===== */
+body {
+  background: #f4f7fa;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.page-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 2rem;
+}
+
+.page-header h1 {
+  margin-bottom: 0.5rem;
+  color: #222;
+}
+
+.page-header p {
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* ===== FORM CONTAINER ===== */
+.admin-form-container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  margin-top: 1rem;
+}
+
+/* ===== FIELDSET ===== */
+.admin-form fieldset {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background: #fafafa;
+}
+
+.admin-form legend {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #333;
+  padding: 0 0.5rem;
+}
+
+/* ===== LABEL & INPUT ===== */
+.admin-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.admin-form label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+  color: #444;
+}
+
+.admin-form input[type="text"],
+.admin-form input[type="email"],
+.admin-form input[type="url"],
+.admin-form input[type="number"],
+.admin-form select,
+.admin-form textarea {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.admin-form input:focus,
+.admin-form select:focus,
+.admin-form textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+  outline: none;
+}
+
+/* ===== CHECKBOX GROUP ===== */
+.admin-form .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.admin-form .row div {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ===== BUTTON ===== */
+.submit-btn {
+  background: #007bff;
+  color: white;
+  font-weight: 600;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.submit-btn:hover {
+  background: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 91, 187, 0.3);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .admin-form-container {
+    padding: 1rem;
+  }
+  .admin-form fieldset {
+    padding: 1rem;
+  }
+}
+</style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar" id="sidebar">
+            <button class="sidebar-toggle-btn" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <h2>Pengelola</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="dashboard_pengelola.php"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
+                <li><a href="register_journal.php" class="active"><i class="fas fa-plus-circle"></i> <span>Daftar Jurnal Baru</span></a></li>
+                <li><a href="view_my_submissions.php"><i class="fas fa-list-alt"></i> <span>Daftar & Status Jurnal</span></a></li>
+                <li><a href="../api/logout.php"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="header">
+                <h1>Selamat Datang, <?php echo htmlspecialchars($_SESSION['user_name']); ?></h1>
+                <div class="user-profile">
+                    <span>Role: Pengelola</span>
+                    <a href="../api/logout.php">Logout</a>
+                </div>
+            </div>
+
 
 <main class="page-container">
     <div class="container">
@@ -187,4 +361,5 @@ include 'header.php';
         </div>
     </div>
 </main>
-<?php include 'footer.php'; ?>
+</body>
+</html>
