@@ -3,7 +3,7 @@
 session_start();
 
 // Periksa apakah pengguna sudah login dan memiliki peran superadmin
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'superadmin') {
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     header("Location: login.php");
     exit();
 }
@@ -115,7 +115,7 @@ while ($row = $result->fetch_assoc()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Jurnal - Superadmin</title>
+    <title>Detail Jurnal - Admin</title>
     <link rel="stylesheet" href="admin_style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -180,12 +180,10 @@ while ($row = $result->fetch_assoc()) {
                 <h2>Superadmin</h2>
             </div>
             <ul class="sidebar-menu">
-                <li><a href="dashboard_superadmin.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="manage_admin.php"><i class="fas fa-user-shield"></i> Kelola Admin</a></li>
+                 <li><a href="dashboard_admin.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 <li><a href="manage_pengelola.php"><i class="fas fa-user-cog"></i> Kelola Pengelola</a></li>
-                <li><a href="manage_jurnal_status.php" class="active"><i class="fas fa-book"></i> Kelola Jurnal</a></li>
-                <li><a href="change_password.php"><i class="fas fa-key"></i> Ganti Password</a></li>
-                <li><a href="../api/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                <li><a href="manage_journal.php" class="active"><i class="fas fa-book"></i> <span>Kelola Jurnal</span></a></li>
+                <li><a href="../api/logout.php"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
             </ul>
         </div>
         <!-- End Sidebar -->
