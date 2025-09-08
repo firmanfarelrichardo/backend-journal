@@ -3,7 +3,7 @@
 session_start();
 
 // Periksa apakah pengguna sudah login dan memiliki peran superadmin
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'superadmin') {
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     header("Location: login.php");
     exit();
 }
@@ -106,22 +106,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_pengelola'])) 
 /* ===== Label ===== */
 .form-container label {
   display: block;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 6px;
-  color: #333;
+            margin-top: 15px;
+            font-weight: bold;
 }
 
 /* ===== Input ===== */
 .form-container input {
-  width: 100%;
-  padding: 12px 14px;
-  margin-bottom: 18px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  outline: none;
-  transition: all 0.3s ease;
-  font-size: 14px;
+width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
 }
 
 .form-container input:focus {
@@ -131,16 +126,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_pengelola'])) 
 
 /* ===== Tombol ===== */
 .form-container button {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(135deg, #4facfe, #00f2fe);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  font-size: 15px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
+ margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
 }
 
 .form-container button:hover {
@@ -155,16 +147,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_pengelola'])) 
     <div class="dashboard-container">
         <div class="sidebar" id="sidebar">
             <div class="logo">
-                <h2>Superadmin</h2>
+                <h2>Admin</h2>
             </div>
             <ul class="sidebar-menu">
-                <li><a href="dashboard_superadmin.php"><i class="fas fa-tachometer-alt"></i> <span>Dashboard</span></a></li>
-                <li><a href="manage_admin.php"><i class="fas fa-user-shield"></i> <span>Kelola Admin</span></a></li>
-                <li><a href="manage_pengelola.php" class="active"><i class="fas fa-user-cog"></i> <span>Kelola Pengelola</span></a></li>
+                <li><a href="dashboard_admin.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="manage_pengelola.php" class="active"><i class="fas fa-user-cog"></i> Kelola Pengelola</a></li>
                 <li><a href="manage_journal.php"><i class="fas fa-book"></i> <span>Kelola Jurnal</span></a></li>
-                <li><a href="change_password.php"><i class="fas fa-key"></i> <span>Ganti Password</span></a></li>
                 <li><a href="../api/logout.php"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
-            </ul>
         </div>
         <div class="main-content">
             <button class="sidebar-toggle-btn" onclick="toggleSidebar()">
