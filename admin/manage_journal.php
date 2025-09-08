@@ -3,7 +3,7 @@
 session_start();
 
 // Periksa apakah pengguna sudah login dan memiliki peran superadmin
-if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'superadmin') {
+if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
     header("Location: login.php");
     exit();
 }
@@ -116,12 +116,10 @@ if ($result) {
                 <h2>Superadmin</h2>
             </div>
             <ul class="sidebar-menu">
-                <li><a href="dashboard_superadmin.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="manage_admin.php"><i class="fas fa-user-shield"></i> Kelola Admin</a></li>
+                <li><a href="dashboard_admin.php"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
                 <li><a href="manage_pengelola.php"><i class="fas fa-user-cog"></i> Kelola Pengelola</a></li>
-                <li><a href="manage_journal.php" class="active"><i class="fas fa-book"></i> Kelola Jurnal</a></li>
-                <li><a href="change_password.php"><i class="fas fa-key"></i> Ganti Password</a></li>
-                <li><a href="../api/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                <li><a href="manage_journal.php" class="active"><i class="fas fa-book"></i> <span>Kelola Jurnal</span></a></li>
+                <li><a href="../api/logout.php"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
             </ul>
         </div>
         <!-- End Sidebar -->
