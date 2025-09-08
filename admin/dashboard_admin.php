@@ -21,9 +21,9 @@ if ($conn->connect_error) {
 }
 
 // Ambil data statistik untuk dashboard
-$totalUsers = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'user'")->fetch_row()[0];
-$totalPendingJournals = $conn->query("SELECT COUNT(*) FROM journal_submissions WHERE status = 'pending'")->fetch_row()[0];
-$totalApprovedJournals = $conn->query("SELECT COUNT(*) FROM journal_submissions WHERE status = 'approved'")->fetch_row()[0];
+$totalPengelola = $conn->query("SELECT COUNT(*) FROM users WHERE role = 'pengelola'")->fetch_row()[0];
+$totalJurnals = $conn->query("SELECT COUNT(*) FROM jurnal_submissions")->fetch_row()[0];
+$pendingJurnals = $conn->query("SELECT COUNT(*) FROM jurnal_submissions WHERE status = 'pending'")->fetch_row()[0];
 
 ?>
 <!DOCTYPE html>
@@ -44,8 +44,9 @@ $totalApprovedJournals = $conn->query("SELECT COUNT(*) FROM journal_submissions 
             </div>
             <ul class="sidebar-menu">
                 <li><a href="dashboard_admin.php" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="manage_journal.php"><i class="fas fa-tasks"></i> Kelola Status Jurnal</a></li>
-                <li><a href="../api/logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                <li><a href="manage_pengelola.php"><i class="fas fa-user-cog"></i> Kelola Pengelola</a></li>
+                <li><a href="manage_journal.php"><i class="fas fa-book"></i> <span>Kelola Jurnal</span></a></li>
+                <li><a href="../api/logout.php"><i class="fas fa-sign-out-alt"></i> <span>Logout</span></a></li>
             </ul>
         </div>
         <!-- End Sidebar -->
@@ -53,7 +54,7 @@ $totalApprovedJournals = $conn->query("SELECT COUNT(*) FROM journal_submissions 
         <!-- Main Content -->
         <div class="main-content">
             <div class="header">
-                <h1>Selamat Datang, <?php echo $_SESSION['user_name']; ?></h1>
+                <h1>Selamat Datang, <?php echo htmlspecialchars($_SESSION['user_name']); ?></h1>
                 <div class="user-profile">
                     <span>Role: Admin</span>
                     <a href="../api/logout.php">Logout</a>
@@ -63,12 +64,12 @@ $totalApprovedJournals = $conn->query("SELECT COUNT(*) FROM journal_submissions 
             <div class="content-area">
                 <div class="card">
                     <h3>Statistik Pengguna</h3>
-                    <p>Total Pengguna Publik: **<?php echo $totalUsers; ?>**</p>
+                    <p>Total Pengelola: **<?php echo $totalPengelola; ?>**</p>
                 </div>
                 <div class="card">
                     <h3>Status Jurnal</h3>
-                    <p>Jurnal Menunggu Persetujuan: **<?php echo $totalPendingJournals; ?>**</p>
-                    <p>Jurnal Diterima: **<?php echo $totalApprovedJournals; ?>**</p>
+                    <p>Total Submissions: **<?php echo $totalJurnals; ?>**</p>
+                    <p>Menunggu Persetujuan: **<?php echo $pendingJurnals; ?>**</p>
                 </div>
             </div>
         </div>
